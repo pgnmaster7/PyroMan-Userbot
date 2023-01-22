@@ -113,7 +113,7 @@ async def delaystickerspam(client: Client, message: Message):
                 if not limit:
                     break
 
-        elif message.chat.type == enums.ChatType.PRIVATE:
+        elif message.chat.type in [enums.ChatType.PRIVATE, enums.ChatType.BOT]:
             for i in range(0, count):
                 if i != 0:
                     delaySpamEvent.wait(delay)
