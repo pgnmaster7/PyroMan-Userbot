@@ -67,7 +67,7 @@ async def delayspam(client: Client, message: Message):
     )
     
 @Client.on_message(filters.me & filters.command(["dsspam", "delaystickerspam"], cmd))
-async def delayspam(client: Client, message: Message):
+async def delaystickerspam(client: Client, message: Message):
     if message.chat.id in BLACKLIST_CHAT:
         return await edit_or_reply(
             message, "**Perintah ini Dilarang digunakan di Group ini**"
