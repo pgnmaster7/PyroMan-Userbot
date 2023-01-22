@@ -99,8 +99,8 @@ async def delaystickerspam(client: Client, message: Message):
         
         i = 0
         times = message.command[1]
+        delaySpamEvent = Event()
         if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
-            delaySpamEvent = Event()
             for i in range(0, count):
                 if i != 0:
                     delaySpamEvent.wait(delay)
