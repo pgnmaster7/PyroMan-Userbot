@@ -65,6 +65,67 @@ async def delayspam(client: Client, message: Message):
     await client.send_message(
         BOTLOG_CHATID, "**#DELAYSPAM**\nDelaySpam was executed successfully"
     )
+    
+@Client.on_message(filters.me & filters.command(["dsspam", "delaystickerspam"], cmd))
+async def delayspam(client: Client, message: Message):
+    if message.chat.id in BLACKLIST_CHAT:
+        return await edit_or_reply(
+            message, "**Perintah ini Dilarang digunakan di Group ini**"
+        )
+    if not message.reply_to_message:
+        await edit_or_reply(
+            message, "**reply to a sticker with amount you want to spam**"
+        )
+        return
+    if not message.reply_to_message.sticker:
+        await edit_or_reply(
+            message, "**reply to a sticker with amount you want to spam**"
+        )
+        return
+    else:
+        delayspam = await extract_args(message)
+        arr = delayspam.split()
+        if len(arr) < 2 or not arr[0].isdigit() or not arr[1].isdigit():
+            await message.edit("`Something seems missing / wrong.`")
+            return
+        delay = int(arr[0])
+        count = int(arr[1])
+        spam_sticker_message = delayspam.replace(arr[0], "", 1)
+        spam_sticker_message = spam_sticker_message.replace(arr[1], "", 1).strip()
+        await message.delete()
+
+        if not spam_allowed():
+            return
+        
+        i = 0
+        times = message.command[1]
+        if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
+            delaySpamEvent = Event()
+            for i in range(0, count):
+                if i != 0:
+                    delaySpamEvent.wait(delay)
+                sticker = message.reply_to_message.sticker.file_id
+                await client.send_sticker(
+                    message.chat.id,
+                    sticker,
+                )
+                limit = increment_spam_count()
+                if not limit:
+                    break
+
+        if message.chat.type == enums.ChatType.PRIVATE:
+            for i in range(0, count):
+            if i != 0:
+                delaySpamEvent.wait(delay)
+            sticker = message.reply_to_message.sticker.file_id
+            await client.send_sticker(message.chat.id, sticker)
+            limit = increment_spam_count()
+            if not limit:
+                break
+
+        await client.send_message(
+            BOTLOG_CHATID, "**#DELAYSTICKERSPAM**\nDelayStickerSpam was executed successfully"
+        )
 
 
 @Client.on_message(filters.command(commands, cmd) & filters.me)
@@ -130,5 +191,6 @@ add_command_help(
             "delayspam <detik> <jumlah spam> <text>",
             "Mengirim teks spam dengan jangka delay yang ditentukan!",
         ],
+        ["dsspam <detik> <jumlah spam>", "Reply sticker yang akan digunakan untuk spam"],
     ],
 )
