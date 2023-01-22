@@ -72,12 +72,12 @@ async def delaystickerspam(client: Client, message: Message):
         return await edit_or_reply(
             message, "**Perintah ini Dilarang digunakan di Group ini**"
         )
-    if not message.reply_to_message:
+    elif not message.reply_to_message:
         await edit_or_reply(
             message, "**reply to a sticker with amount you want to spam**"
         )
         return
-    if not message.reply_to_message.sticker:
+    elif not message.reply_to_message.sticker:
         await edit_or_reply(
             message, "**reply to a sticker with amount you want to spam**"
         )
@@ -113,7 +113,7 @@ async def delaystickerspam(client: Client, message: Message):
                 if not limit:
                     break
 
-        if message.chat.type == enums.ChatType.PRIVATE:
+        elif message.chat.type == enums.ChatType.PRIVATE:
             for i in range(0, count):
                 if i != 0:
                     delaySpamEvent.wait(delay)
