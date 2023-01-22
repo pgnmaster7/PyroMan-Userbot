@@ -115,13 +115,13 @@ async def delaystickerspam(client: Client, message: Message):
 
         if message.chat.type == enums.ChatType.PRIVATE:
             for i in range(0, count):
-            if i != 0:
-                delaySpamEvent.wait(delay)
-            sticker = message.reply_to_message.sticker.file_id
-            await client.send_sticker(message.chat.id, sticker)
-            limit = increment_spam_count()
-            if not limit:
-                break
+                if i != 0:
+                    delaySpamEvent.wait(delay)
+                sticker = message.reply_to_message.sticker.file_id
+                await client.send_sticker(message.chat.id, sticker)
+                limit = increment_spam_count()
+                if not limit:
+                    break
 
         await client.send_message(
             BOTLOG_CHATID, "**#DELAYSTICKERSPAM**\nDelayStickerSpam was executed successfully"
